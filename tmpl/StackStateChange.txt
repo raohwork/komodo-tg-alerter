@@ -1,0 +1,5 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+State of Stack *{{ (.Data.Payload.Get "name").Str }}* has changed
+Server: {{ (.Data.Payload.Get "server_name").Str }}
+To: *{{ (.Data.Payload.Get "to").Str }}*
+From: {{ (.Data.Payload.Get "from").Str }}
