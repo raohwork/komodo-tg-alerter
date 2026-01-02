@@ -1,6 +1,6 @@
-*{{ .Level }}* {{ .IssuedAt | timefmt }}
+*{{ .Level | e }}* {{ .IssuedAt | timefmt | e }}
 Image Update Available for Stack
-Stack: *{{ (.Data.Payload.Get "name").Str }}*
-Server: {{ (.Data.Payload.Get "server_name").Str }}
-Service: {{ (.Data.Payload.Get "service").Str }}
-New Image: {{ (.Data.Payload.Get "image").Str }}
+Stack: *{{ (.Data.Payload.Get "name").Str | e }}*
+Server: {{ (.Data.Payload.Get "server_name").Str | e }}
+Service: {{ (.Data.Payload.Get "service").Str | e }}
+New Image: {{ (.Data.Payload.Get "image").Str | e }}

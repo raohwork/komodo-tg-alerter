@@ -1,5 +1,5 @@
-*{{ .Level }}* {{ .IssuedAt | timefmt }}
-State of Container *{{ (.Data.Payload.Get "name").Str }}* has changed
-Server: {{ (.Data.Payload.Get "server_name").Str }}
-To: *{{ (.Data.Payload.Get "to").Str }}*
-From: {{ (.Data.Payload.Get "from").Str }}
+*{{ .Level | e }}* {{ .IssuedAt | timefmt | e }}
+State of Container *{{ (.Data.Payload.Get "name").Str | e }}* has changed
+Server: {{ (.Data.Payload.Get "server_name").Str | e }}
+To: *{{ (.Data.Payload.Get "to").Str | e }}*
+From: {{ (.Data.Payload.Get "from").Str | e }}

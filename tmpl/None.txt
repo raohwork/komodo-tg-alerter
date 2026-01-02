@@ -1,2 +1,2 @@
-*{{ .Level }}* {{ .IssuedAt | timefmt }}
+*{{ .Level | e }}* {{ .IssuedAt | timefmt | e }}
 Alert received (no specific type)

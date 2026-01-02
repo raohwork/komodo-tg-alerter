@@ -1,5 +1,5 @@
-*{{ .Level }}* {{ .IssuedAt | timefmt }}
+*{{ .Level | e }}* {{ .IssuedAt | timefmt | e }}
 Stack Auto-Updated
-Stack: *{{ (.Data.Payload.Get "name").Str }}*
-Server: {{ (.Data.Payload.Get "server_name").Str }}
-Images: {{ (.Data.Payload.Get "images").Str }}
+Stack: *{{ (.Data.Payload.Get "name").Str | e }}*
+Server: {{ (.Data.Payload.Get "server_name").Str | e }}
+Images: {{ (.Data.Payload.Get "images").Str | e }}

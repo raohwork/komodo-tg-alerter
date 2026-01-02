@@ -1,4 +1,4 @@
-*{{ .Level }}* {{ .IssuedAt | timefmt }}
+*{{ .Level | e }}* {{ .IssuedAt | timefmt | e }}
 Repo Build Failed
-Repo: *{{ (.Data.Payload.Get "name").Str }}*
-ID: {{ (.Data.Payload.Get "id").Str }}
+Repo: *{{ (.Data.Payload.Get "name").Str | e }}*
+ID: {{ (.Data.Payload.Get "id").Str | e }}

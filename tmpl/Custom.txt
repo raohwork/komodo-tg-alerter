@@ -1,4 +1,4 @@
-*{{ .Level }}* {{ .IssuedAt | timefmt }}
+*{{ .Level | e }}* {{ .IssuedAt | timefmt | e }}
 Custom Alert
-{{ (.Data.Payload.Get "message").Str }}
-{{ (.Data.Payload.Get "details").Str }}
+{{ (.Data.Payload.Get "message").Str | e }}
+{{ (.Data.Payload.Get "details").Str | e }}
