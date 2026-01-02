@@ -1,0 +1,6 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Server Disk Alert
+Server: *{{ (.Data.Payload.Get "name").Str }}*
+Region: {{ (.Data.Payload.Get "region").Str }}
+Path: {{ (.Data.Payload.Get "path").Str }}
+Disk Usage: *{{ (.Data.Payload.Get "used_gb").Num }} GB / {{ (.Data.Payload.Get "total_gb").Num }} GB*

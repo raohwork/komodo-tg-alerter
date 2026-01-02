@@ -1,0 +1,5 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Stack Auto-Updated
+Stack: *{{ (.Data.Payload.Get "name").Str }}*
+Server: {{ (.Data.Payload.Get "server_name").Str }}
+Images: {{ (.Data.Payload.Get "images").Str }}

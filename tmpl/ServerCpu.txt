@@ -1,0 +1,5 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Server CPU Alert
+Server: *{{ (.Data.Payload.Get "name").Str }}*
+Region: {{ (.Data.Payload.Get "region").Str }}
+CPU Usage: *{{ (.Data.Payload.Get "percentage").Num }}%*

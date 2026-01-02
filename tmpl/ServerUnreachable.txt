@@ -1,0 +1,5 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Server Unreachable
+Server: *{{ (.Data.Payload.Get "name").Str }}*
+Region: {{ (.Data.Payload.Get "region").Str }}
+Error: {{ (.Data.Payload.Get "err").Str }}

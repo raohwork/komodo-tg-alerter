@@ -1,0 +1,4 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Resource Sync Pending Updates
+Resource: *{{ (.Data.Payload.Get "name").Str }}*
+ID: {{ (.Data.Payload.Get "id").Str }}

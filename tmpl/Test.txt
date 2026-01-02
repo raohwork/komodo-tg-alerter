@@ -1,0 +1,4 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Test Alert
+ID: {{ (.Data.Payload.Get "id").Str }}
+Name: {{ (.Data.Payload.Get "name").Str }}

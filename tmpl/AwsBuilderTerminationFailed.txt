@@ -1,0 +1,4 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+AWS Builder Termination Failed
+Instance ID: {{ (.Data.Payload.Get "instance_id").Str }}
+Message: {{ (.Data.Payload.Get "message").Str }}

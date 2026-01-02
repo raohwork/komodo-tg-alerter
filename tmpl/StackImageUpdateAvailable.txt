@@ -1,0 +1,6 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Image Update Available for Stack
+Stack: *{{ (.Data.Payload.Get "name").Str }}*
+Server: {{ (.Data.Payload.Get "server_name").Str }}
+Service: {{ (.Data.Payload.Get "service").Str }}
+New Image: {{ (.Data.Payload.Get "image").Str }}

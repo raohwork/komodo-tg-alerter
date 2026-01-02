@@ -1,0 +1,5 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Server Memory Alert
+Server: *{{ (.Data.Payload.Get "name").Str }}*
+Region: {{ (.Data.Payload.Get "region").Str }}
+Memory Usage: *{{ (.Data.Payload.Get "used_gb").Num }} GB / {{ (.Data.Payload.Get "total_gb").Num }} GB*

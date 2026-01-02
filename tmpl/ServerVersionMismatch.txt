@@ -1,0 +1,6 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Server Version Mismatch
+Server: *{{ (.Data.Payload.Get "name").Str }}*
+Region: {{ (.Data.Payload.Get "region").Str }}
+Server Version: {{ (.Data.Payload.Get "server_version").Str }}
+Core Version: {{ (.Data.Payload.Get "core_version").Str }}

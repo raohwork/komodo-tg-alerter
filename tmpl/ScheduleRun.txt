@@ -1,0 +1,5 @@
+*{{ .Level }}* {{ .IssuedAt | timefmt }}
+Schedule Run
+Resource Type: {{ (.Data.Payload.Get "resource_type").Str }}
+Name: *{{ (.Data.Payload.Get "name").Str }}*
+ID: {{ (.Data.Payload.Get "id").Str }}
