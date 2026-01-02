@@ -26,6 +26,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/go-telegram/bot"
 	"github.com/raohwork/komodo-tg-alerter/komodo"
 	"github.com/rs/zerolog/log"
 )
@@ -47,6 +48,8 @@ func Lint(fs fs.FS) error {
 			"timefmt": func(t time.Time) string {
 				return t.Format("2006-01-02 15:04:05")
 			},
+			"escape": bot.EscapeMarkdown,
+			"e":      bot.EscapeMarkdown, // short alias for escape
 		}).
 		ParseFS(fs, "*.txt")
 	if err != nil {
@@ -75,6 +78,8 @@ func (r Renderer) Render(data *komodo.AlertInfo) (string, error) {
 			"timefmt": func(t time.Time) string {
 				return t.Format("2006-01-02 15:04:05")
 			},
+			"escape": bot.EscapeMarkdown,
+			"e":      bot.EscapeMarkdown, // short alias for escape
 		}).
 		ParseFS(r.fs, typ+".txt")
 	if err != nil {
