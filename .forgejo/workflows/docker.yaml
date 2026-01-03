@@ -28,7 +28,7 @@ jobs:
 
       - name: Build amd64 binary
         run: |
-          GOARCH=amd64 go build -o kta ./cmd/surl
+          GOARCH=amd64 go build -o kta
       - name: Build amd64 docker image
         uses: docker/build-push-action@v6
         with:
@@ -41,7 +41,7 @@ jobs:
 
       - name: Build arm64 binary
         run: |
-          GOARCH=arm64 go build -o kta ./cmd/surl
+          GOARCH=arm64 go build -o kta
       - name: Build arm64 docker image
         uses: docker/build-push-action@v6
         with:
