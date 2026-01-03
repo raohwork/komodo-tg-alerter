@@ -3,4 +3,4 @@ Server Disk Alert
 Server: *{{ (.Data.Payload.Get "name").Str | e }}*
 Region: {{ (.Data.Payload.Get "region").Str | e }}
 Path: {{ (.Data.Payload.Get "path").Str | e }}
-Disk Usage: *{{ (.Data.Payload.Get "used_gb").Num }} GB / {{ (.Data.Payload.Get "total_gb").Num }} GB*
+Disk Usage: *{{ (.Data.Payload.Get "used_gb").Num | f }} GB / {{ (.Data.Payload.Get "total_gb").Num | f }} GB*

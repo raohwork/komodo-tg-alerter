@@ -47,6 +47,9 @@ func prepareTemplate() *template.Template {
 			},
 			"escape": bot.EscapeMarkdown,
 			"e":      bot.EscapeMarkdown, // short alias for escape
+			"f": func(f float64) string {
+				return bot.EscapeMarkdown(fmt.Sprintf("%.4f", f))
+			},
 		})
 }
 
