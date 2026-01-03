@@ -1,0 +1,10 @@
+web:
+  bind: ":8964"
+log:
+  level: info
+  # uncomment to write a copy of logs in json format to a file
+  # file: /path/to/log.file.json
+telegram:
+  token: secret_telegram_bot_token
+  # your telegram user/chat id
+  chat: 123
