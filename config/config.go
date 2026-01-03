@@ -82,5 +82,7 @@ func NewConfig() *Config {
 		TelegramChatID:  viper.GetInt64("telegram.chat"),
 		WebBind:         viper.GetString("web.bind"),
 		CustemplatePath: viper.GetString("template.path"),
+		LogLevel:        viper.GetString("log.level"),
+		LogFile:         viper.GetString("log.file"),
 	}
 }
