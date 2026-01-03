@@ -1,0 +1,57 @@
+name: Build Docker Image
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  Main:
+    runs-on: any
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - name: Set up qemu for buildx
+        uses: docker/setup-qemu-action@v3
+      - name: Setup buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
+      - name: Docker - login to dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build amd64 binary
+        run: |
+          GOARCH=amd64 go build -o kta
+      - name: Build amd64 docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          file: ci.dockerfile
+          pull: true
+          push: true
+          tags: ronmi/kta:amd64
+
+      - name: Build arm64 binary
+        run: |
+          GOARCH=arm64 go build -o kta
+      - name: Build arm64 docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/arm64
+          file: ci.dockerfile
+          pull: true
+          push: true
+          tags: ronmi/kta:arm64
+
+      - name: Create multiarch image
+        run: |
+          docker buildx imagetools create -t ronmi/kta ronmi/kta:arm64 ronmi/kta:amd64
