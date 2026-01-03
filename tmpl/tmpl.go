@@ -22,6 +22,7 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
+	"os"
 	"strings"
 	"text/template"
 	"time"
@@ -54,6 +55,16 @@ func NewRenderer(fs fs.FS) *Renderer {
 		fs = Files
 	}
 	return &Renderer{fs: fs}
+}
+
+// NewRendererFromPath creates a Renderer using a custom template path.
+// If path is empty, it uses the embedded templates.
+// If path is not empty, it uses os.DirFS to load templates from the filesystem.
+func NewRendererFromPath(path string) *Renderer {
+	if path == "" {
+		return NewRenderer(nil)
+	}
+	return NewRenderer(os.DirFS(path))
 }
 
 func (r Renderer) Render(data *komodo.AlertInfo) (string, error) {

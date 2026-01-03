@@ -17,9 +17,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
+	"io/fs"
 	"os"
 	"time"
 
+	"github.com/raohwork/komodo-tg-alerter/config"
 	"github.com/raohwork/komodo-tg-alerter/tmpl"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -35,7 +37,13 @@ var lintCmd = &cobra.Command{
 		l := zerolog.New(w).With().Timestamp().Logger().Level(zerolog.TraceLevel)
 		log.Logger = l
 
-		tmpl.Lint(nil)
+		cfg := config.NewConfig()
+		var templateFS fs.FS = tmpl.Files
+		if cfg.CustemplatePath != "" {
+			templateFS = os.DirFS(cfg.CustemplatePath)
+		}
+
+		tmpl.Lint(templateFS)
 	},
 }
 
