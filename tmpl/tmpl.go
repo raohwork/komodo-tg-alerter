@@ -38,20 +38,23 @@ type Renderer struct {
 	fs fs.FS
 }
 
-func Lint(fs fs.FS) error {
-	if fs == nil {
-		fs = Files
-	}
-
-	_, err := template.New("lint").
+func prepareTemplate() *template.Template {
+	return template.New("").
 		Funcs(template.FuncMap{
 			"timefmt": func(t time.Time) string {
 				return t.Format("2006-01-02 15:04:05")
 			},
 			"escape": bot.EscapeMarkdown,
 			"e":      bot.EscapeMarkdown, // short alias for escape
-		}).
-		ParseFS(fs, "*.txt")
+		})
+}
+
+func Lint(fs fs.FS) error {
+	if fs == nil {
+		fs = Files
+	}
+
+	_, err := prepareTemplate().ParseFS(fs, "*.txt")
 	if err != nil {
 		return fmt.Errorf("parse templates: %w", err)
 	}
@@ -73,15 +76,7 @@ func (r Renderer) Render(data *komodo.AlertInfo) (string, error) {
 		Msg("rendering template")
 
 	typ := data.Data.Type
-	t, err := template.New(typ).
-		Funcs(template.FuncMap{
-			"timefmt": func(t time.Time) string {
-				return t.Format("2006-01-02 15:04:05")
-			},
-			"escape": bot.EscapeMarkdown,
-			"e":      bot.EscapeMarkdown, // short alias for escape
-		}).
-		ParseFS(r.fs, typ+".txt")
+	t, err := prepareTemplate().ParseFS(r.fs, typ+".txt")
 	if err != nil {
 		return "", fmt.Errorf("parse template %s: %w", typ, err)
 	}
