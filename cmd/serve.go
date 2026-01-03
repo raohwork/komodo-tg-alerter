@@ -21,16 +21,14 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"time"
 
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
+	"github.com/raohwork/komodo-tg-alerter/config"
 	"github.com/raohwork/komodo-tg-alerter/komodo"
 	"github.com/raohwork/komodo-tg-alerter/tmpl"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // serveCmd represents the serve command
@@ -41,28 +39,27 @@ var serveCmd = &cobra.Command{
 		ctx, stop := signal.NotifyContext(cmd.Context(), os.Interrupt)
 		defer stop()
 
+		cfg := config.NewConfig()
+		if err := cfg.Validate(); err != nil {
+			log.Fatal().Err(err).Msg("invalid configuration")
+		}
+
 		renderer := tmpl.NewRenderer(nil)
-		w := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
-		l := zerolog.New(w).With().Timestamp().Logger().Level(zerolog.TraceLevel)
+		l, closeLogFile, err := cfg.GetLogger()
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to initialize logger")
+		}
+		defer closeLogFile()
 		log.Logger = l
 
-		botToken := viper.GetString("telegram.token")
-		if botToken == "" {
-			l.Fatal().Msg("telegram.token is not set")
-		}
-		chatID := viper.GetInt64("telegram.chat")
-		if chatID == 0 {
-			l.Fatal().Msg("telegram.chat is not set")
-		}
-
-		tgapi, err := bot.New(botToken)
+		tgapi, err := bot.New(cfg.TelegramToken)
 		if err != nil {
 			l.Fatal().Err(err).Msg("failed to create telegram bot")
 		}
 
-		l.Info().Msg("Starting Komodo Telegram Alerter on :8964")
+		l.Info().Msg("Starting Komodo Telegram Alerter")
 		srv := &http.Server{
-			Addr: ":8964",
+			Addr: cfg.WebBind,
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				var data komodo.AlertInfo
 				err := json.NewDecoder(r.Body).Decode(&data)
@@ -80,7 +77,7 @@ var serveCmd = &cobra.Command{
 				l.Info().Msgf("Rendered message:\n%s", msg)
 
 				_, err = tgapi.SendMessage(ctx, &bot.SendMessageParams{
-					ChatID:    chatID,
+					ChatID:    cfg.TelegramChatID,
 					Text:      msg,
 					ParseMode: models.ParseModeMarkdown,
 				})

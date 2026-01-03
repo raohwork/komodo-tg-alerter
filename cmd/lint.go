@@ -17,7 +17,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"time"
 
@@ -36,7 +35,7 @@ var lintCmd = &cobra.Command{
 		l := zerolog.New(w).With().Timestamp().Logger().Level(zerolog.TraceLevel)
 		log.Logger = l
 
-		fmt.Println(tmpl.Lint(nil))
+		tmpl.Lint(nil)
 	},
 }
 
