@@ -44,7 +44,23 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is ./komodo-tg-alerter.yaml or $HOME/komodo-tg-alerter.yaml)")
+	f := rootCmd.PersistentFlags()
+	f.StringVarP(&cfgFile, "config", "C", "", "config file (default is ./komodo-tg-alerter.yaml or $HOME/komodo-tg-alerter.yaml)")
+
+	f.StringP("bind", "b", ":8964", "address to bind the alerting server to")
+	viper.BindPFlag("web.bind", f.Lookup("bind"))
+
+	f.StringP("level", "l", "info", "logging level (debug, info, warn, error, fatal, panic)")
+	viper.BindPFlag("log.level", f.Lookup("level"))
+
+	f.StringP("file", "f", "", "additional logging file")
+	viper.BindPFlag("log.file", f.Lookup("file"))
+
+	f.StringP("token", "t", "", "Telegram bot token")
+	viper.BindPFlag("telegram.token", f.Lookup("token"))
+
+	f.Int64P("chat", "c", 0, "Telegram chat ID to send alerts to")
+	viper.BindPFlag("telegram.chat", f.Lookup("chat"))
 }
 
 // initConfig reads in config file and ENV variables if set.
