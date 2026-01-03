@@ -49,19 +49,6 @@ func prepareTemplate() *template.Template {
 		})
 }
 
-func Lint(fs fs.FS) error {
-	if fs == nil {
-		fs = Files
-	}
-
-	_, err := prepareTemplate().ParseFS(fs, "*.txt")
-	if err != nil {
-		return fmt.Errorf("parse templates: %w", err)
-	}
-
-	return nil
-}
-
 func NewRenderer(fs fs.FS) *Renderer {
 	if fs == nil {
 		fs = Files
