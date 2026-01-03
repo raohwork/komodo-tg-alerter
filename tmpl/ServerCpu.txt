@@ -2,4 +2,4 @@
 Server CPU Alert
 Server: *{{ (.Data.Payload.Get "name").Str | e }}*
 Region: {{ (.Data.Payload.Get "region").Str | e }}
-CPU Usage: *{{ (.Data.Payload.Get "percentage").Num }}%*
+CPU Usage: *{{ (.Data.Payload.Get "percentage").Num | f }}%*
