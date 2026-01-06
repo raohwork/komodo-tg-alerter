@@ -43,7 +43,7 @@ var lintCmd = &cobra.Command{
 			templateFS = os.DirFS(cfg.CustemplatePath)
 		}
 
-		tmpl.Lint(templateFS)
+		tmpl.Lint(templateFS, cfg.Timezone())
 	},
 }
 

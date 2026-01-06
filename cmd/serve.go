@@ -44,7 +44,7 @@ var serveCmd = &cobra.Command{
 			log.Fatal().Err(err).Msg("invalid configuration")
 		}
 
-		renderer := tmpl.NewRendererFromPath(cfg.CustemplatePath)
+		renderer := tmpl.NewRendererFromPath(cfg.CustemplatePath, cfg.Timezone())
 		l, closeLogFile, err := cfg.GetLogger()
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to initialize logger")

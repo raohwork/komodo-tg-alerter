@@ -61,6 +61,12 @@ func init() {
 
 	f.Int64P("chat", "c", 0, "Telegram chat ID to send alerts to")
 	viper.BindPFlag("telegram.chat", f.Lookup("chat"))
+
+	f.StringP("timezone", "z", "UTC", "Timezone for time formatting")
+	viper.BindPFlag("general.timezone", f.Lookup("timezone"))
+
+	// bind envvar TZ to general.timezone
+	viper.BindEnv("general.timezone", "TZ")
 }
 
 // initConfig reads in config file and ENV variables if set.

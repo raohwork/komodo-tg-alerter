@@ -20,6 +20,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"time"
@@ -35,6 +36,12 @@ type Config struct {
 	CustemplatePath string
 	LogLevel        string
 	LogFile         string
+	TZ              string
+}
+
+func (c *Config) Timezone() *time.Location {
+	ret, _ := time.LoadLocation(c.TZ)
+	return ret
 }
 
 func (c *Config) Validate() error {
@@ -48,6 +55,14 @@ func (c *Config) Validate() error {
 	_, err := zerolog.ParseLevel(c.LogLevel)
 	if err != nil {
 		return errors.New("log.level is invalid")
+	}
+
+	tz, err := time.LoadLocation(c.TZ)
+	if err != nil {
+		return fmt.Errorf("timezone is invalid: %w", err)
+	}
+	if tz == nil {
+		return errors.New("failed to load timezone: nil time.Location returned without error")
 	}
 
 	return nil
@@ -77,6 +92,7 @@ func (c *Config) GetLogger() (logger zerolog.Logger, close func(), err error) {
 func NewConfig() *Config {
 	viper.SetDefault("web.bind", ":8964")
 	viper.SetDefault("log.level", "info")
+	viper.SetDefault("general.timezone", "UTC")
 	return &Config{
 		TelegramToken:   viper.GetString("telegram.token"),
 		TelegramChatID:  viper.GetInt64("telegram.chat"),
@@ -84,5 +100,6 @@ func NewConfig() *Config {
 		CustemplatePath: viper.GetString("template.path"),
 		LogLevel:        viper.GetString("log.level"),
 		LogFile:         viper.GetString("log.file"),
+		TZ:              viper.GetString("general.timezone"),
 	}
 }

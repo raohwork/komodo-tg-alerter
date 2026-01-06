@@ -416,12 +416,12 @@ var sampleAlerts = map[string]*komodo.AlertInfo{
 }
 
 // Lint checks all templates for syntax errors and renders them with sample data
-func Lint(fs fs.FS) error {
+func Lint(fs fs.FS, tz *time.Location) error {
 	if fs == nil {
 		fs = Files
 	}
 
-	renderer := NewRenderer(fs)
+	renderer := NewRenderer(fs, tz)
 	var hasError bool
 
 	// Try to render each sample alert

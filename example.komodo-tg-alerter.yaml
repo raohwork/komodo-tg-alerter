@@ -1,3 +1,5 @@
+general:
+  timezone: UTC
 web:
   bind: ":8964"
 log:

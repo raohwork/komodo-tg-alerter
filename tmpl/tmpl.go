@@ -37,13 +37,14 @@ var Files embed.FS
 
 type Renderer struct {
 	fs fs.FS
+	tz *time.Location
 }
 
-func prepareTemplate() *template.Template {
+func prepareTemplate(tz *time.Location) *template.Template {
 	return template.New("").
 		Funcs(template.FuncMap{
 			"timefmt": func(t time.Time) string {
-				return t.Format("2006-01-02 15:04:05")
+				return t.In(tz).Format("2006-01-02 15:04:05")
 			},
 			"escape": bot.EscapeMarkdown,
 			"e":      bot.EscapeMarkdown, // short alias for escape
@@ -53,21 +54,21 @@ func prepareTemplate() *template.Template {
 		})
 }
 
-func NewRenderer(fs fs.FS) *Renderer {
+func NewRenderer(fs fs.FS, tz *time.Location) *Renderer {
 	if fs == nil {
 		fs = Files
 	}
-	return &Renderer{fs: fs}
+	return &Renderer{fs: fs, tz: tz}
 }
 
 // NewRendererFromPath creates a Renderer using a custom template path.
 // If path is empty, it uses the embedded templates.
 // If path is not empty, it uses os.DirFS to load templates from the filesystem.
-func NewRendererFromPath(path string) *Renderer {
+func NewRendererFromPath(path string, tz *time.Location) *Renderer {
 	if path == "" {
-		return NewRenderer(nil)
+		return NewRenderer(nil, tz)
 	}
-	return NewRenderer(os.DirFS(path))
+	return NewRenderer(os.DirFS(path), tz)
 }
 
 func (r Renderer) Render(data *komodo.AlertInfo) (string, error) {
@@ -77,7 +78,7 @@ func (r Renderer) Render(data *komodo.AlertInfo) (string, error) {
 		Msg("rendering template")
 
 	typ := data.Data.Type
-	t, err := prepareTemplate().ParseFS(r.fs, typ+".txt")
+	t, err := prepareTemplate(r.tz).ParseFS(r.fs, typ+".txt")
 	if err != nil {
 		return "", fmt.Errorf("parse template %s: %w", typ, err)
 	}
